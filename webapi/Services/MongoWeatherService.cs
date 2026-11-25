@@ -2,6 +2,7 @@
 using MongoDB.Driver;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 // Service to interact with MongoDB
 public class MongoWeatherService
@@ -10,9 +11,11 @@ public class MongoWeatherService
     private readonly IMongoCollection<BsonDocument> _favoritesCollection;
 
     // Constructor to initialize MongoDB connection and collections
-    public MongoWeatherService()
+    public MongoWeatherService(IConfiguration configuration)
     {
-        var connectionString = "mongodb+srv://<user>:<password>@weatherv0.zh8io.mongodb.net/WeatherApplicationDB?retryWrites=true&w=majority";
+        var connectionString = configuration.GetConnectionString("MongoDb")
+            ?? Environment.GetEnvironmentVariable("MONGODB_URI")
+            ?? throw new InvalidOperationException("MongoDB connection string not configured. Set ConnectionStrings:MongoDb or the MONGODB_URI environment variable.");
         var client = new MongoClient(connectionString); // MongoDB Atlas connection
         var database = client.GetDatabase("WeatherApplicationDB");
         _weatherCollection = database.GetCollection<BsonDocument>("WeatherApplicationData");
