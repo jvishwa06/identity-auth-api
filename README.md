@@ -40,8 +40,12 @@ Dockerfile       Multi-stage .NET 8 build, exposes port 8080
 
 ## Configuration
 
-- `ConnectionStrings:idenitycs` in `appsettings.json` is the PostgreSQL connection string (the key is spelled this way in the code).
-- The MongoDB Atlas connection string is set in `webapi/Services/MongoWeatherService.cs`. Replace it with your own.
+Set these before running (in `webapi/appsettings.json`, user secrets or environment variables such as `ConnectionStrings__idenitycs`):
+
+- `ConnectionStrings:idenitycs`: the PostgreSQL connection string (the key is spelled this way in the code).
+- `ConnectionStrings:MongoDb`, or the `MONGODB_URI` environment variable: the MongoDB connection string used to store weather data and favourite cities.
+
+`appsettings.json` contains placeholders only. Do not commit real credentials.
 
 ## Run
 
